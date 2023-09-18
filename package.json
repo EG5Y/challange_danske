@@ -2,11 +2,16 @@
   "name": "challange-danske",
   "type": "module",
   "scripts": {
+    "dev": "concurrently \"bun fe-todo-dev\" \"bun be-todo-dev\"",
     "fe-todo-dev": "cd apps/fe-todo && bun dev",
     "fe-todo-build": "cd apps/fe-todo && bun build",
+    "be-todo-dev": "cd apps/be-todo && bun dev",
     "lint": "eslint apps --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
   },
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
 }
