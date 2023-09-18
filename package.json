@@ -1,15 +1,17 @@
 {
   "name": "challange-danske",
-  "module": "index.ts",
   "type": "module",
   "scripts": {
-    "fe-todo": "react-scripts start"
+    "fe-todo": "vite apps/fe-todo"
   },
   "devDependencies": {
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react-swc": "^3.3.2",
     "bun-types": "latest",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
