@@ -68,14 +68,6 @@ function ListItem({
 }
 
 function App() {
-  //const [count, setCount] = useState(0);
-
-  // function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-  //   event.preventDefault();
-  //   const form = event.target;
-  //   const formData = new FormData(form);
-  // }
-
   const [listItems, setListItems] = useState<IListItem[]>([
     { text: "Example item one", done: true },
     { text: "Example item two", done: false },
@@ -113,17 +105,17 @@ function App() {
         >
           {({ isSubmitting }) => (
             <Form className="flex gap-4">
-              <div className="border-b-2 border-dark-one w-full flex flex-col justify-end">
+              <div className="border-b-2 border-dark-one w-full h-[40px] flex flex-col justify-end">
+                <ErrorMessage
+                  name="text"
+                  component="div"
+                  className="px-2 text-red-500 text-sm"
+                />
                 <Field
                   type="text"
                   name="text"
                   placeholder="New TODO"
                   className=" w-full px-2"
-                />
-                <ErrorMessage
-                  name="text"
-                  component="div"
-                  className="px-2 text-red-500 "
                 />
               </div>
               <button

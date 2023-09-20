@@ -5,7 +5,7 @@
     "dev": "concurrently \"bun fe-todo-dev\" \"bun be-todo-dev\"",
     "fe-todo-dev": "cd apps/fe-todo && bun dev",
     "fe-todo-build": "cd apps/fe-todo && bun build",
-    "be-todo-dev": "cd apps/be-todo && bun dev",
+    "be-todo-dev": "cd apps/be-todo && bun dev --watch",
     "lint": "eslint apps --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
   },
   "workspaces": [
@@ -13,8 +13,5 @@
   ],
   "devDependencies": {
     "concurrently": "^8.2.1"
-  },
-  "dependencies": {
-    "formik": "^2.4.5"
   }
 }
