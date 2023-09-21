@@ -27,10 +27,12 @@ function ListItem({
 }: {
   text: string;
   done: boolean;
-  onDone: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onSave: (text: string) => void;
+  onDone: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  onRemove: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  onSave: (text: string) => Promise<void>;
 }) {
+  const [isBeingDeleted, setIsBeingDeleted] = useState<boolean>(false);
+  const [isBeingUpdated, setIsBeingUpdated] = useState<boolean>(false);
   const [isChanged, setIsChanged] = useState<string>("");
 
   return (
@@ -53,9 +55,42 @@ function ListItem({
         >
           SAVE
         </button>
+      ) : isBeingUpdated ? (
+        <button
+          className={`${
+            done
+              ? "bg-green-300 transition-shadow duration-300 hover:shadow-btn-green  "
+              : "bg-yellow-300 transition-shadow duration-300 hover:shadow-btn-yellow  "
+          } text-white font-black rounded-2xl px-4 py-1`}
+        >
+          <img
+            src={spinnerLogo}
+            className=" animate-spin w-[100px] h-[24px] "
+            alt="Loading..."
+          />
+        </button>
+      ) : isBeingDeleted ? (
+        <button
+          onClick={async (event) => {
+            setIsBeingUpdated(true);
+            await onDone(event);
+            setIsBeingUpdated(false);
+          }}
+          className={`bg-red-300 transition-shadow duration-300 hover:shadow-btn-green text-white font-black rounded-2xl px-4 py-1`}
+        >
+          <img
+            src={spinnerLogo}
+            className=" animate-spin w-[100px] h-[24px] "
+            alt="Loading..."
+          />
+        </button>
       ) : (
         <button
-          onClick={onDone}
+          onClick={async (event) => {
+            setIsBeingUpdated(true);
+            await onDone(event);
+            setIsBeingUpdated(false);
+          }}
           className={`${
             done
               ? "bg-green-300 transition-shadow duration-300 hover:shadow-btn-green  "
@@ -65,12 +100,18 @@ function ListItem({
           {done ? "COMPLETED" : "UNFINISHED"}
         </button>
       )}
-      <button
-        onClick={onRemove}
-        className="transition-shadow duration-300 hover:shadow-btn-red absolute top-[-5px] right-[-5px] bg-red-300 text-white font-black rounded-2xl w-[20px] h-[20px] grid items-center justify-center text-[10px]  "
-      >
-        <img src={xLogo} alt="x" className="w-[8px]" />
-      </button>
+      {!isBeingUpdated && !isBeingDeleted && (
+        <button
+          onClick={async (event) => {
+            setIsBeingDeleted(true);
+            await onRemove(event);
+            setIsBeingDeleted(false);
+          }}
+          className="transition-shadow duration-300 hover:shadow-btn-red absolute top-[-5px] right-[-5px] bg-red-300 text-white font-black rounded-2xl w-[20px] h-[20px] grid items-center justify-center text-[10px]  "
+        >
+          <img src={xLogo} alt="x" className="w-[8px]" />
+        </button>
+      )}
     </li>
   );
 }
@@ -85,7 +126,6 @@ function App() {
       const items = (items_req.data as IListItemDB[]).sort(
         (a, b) => b.created - a.created,
       );
-      console.log(items);
       setListItems(items);
       setIsLoading(false);
     })();
